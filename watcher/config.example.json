@@ -1,0 +1,15 @@
+{
+    "socket": "wss://socket.donationalerts.ru:443",
+    "connection": {
+        "token": "TOKEN",
+        "type": "minor"
+    },
+    "rcon": {
+        "host": "HOST",
+        "port": 25575,
+        "password": "PASSWORD"
+    },
+    "actions": [
+        { "action": "Say custom text", "amount": 50, "command": "/say {{username}} >> {{message}}" }
+    ]
+}

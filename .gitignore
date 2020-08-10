@@ -1,0 +1,4 @@
+server/
+watcher/config.json
+watcher/node_modules/
+watcher/yarn.lock

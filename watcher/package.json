@@ -1,0 +1,13 @@
+{
+    "name": "change-minecraft-world",
+    "version": "1.0.0",
+    "description": "Позволь донатеру изменить твой мир Minecraft",
+    "main": "index.js",
+    "author": "cipherskyinc",
+    "license": "MIT",
+    "private": true,
+    "dependencies": {
+        "modern-rcon": "^1.0.3",
+        "socket.io-client": "^2.3.0"
+    }
+}
