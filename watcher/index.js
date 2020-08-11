@@ -1,4 +1,4 @@
-const { config } = require("./package.json");
+const config = require("./config.json");
 const socket = require("socket.io-client")(config.socket);
 const rcon = new (require("modern-rcon"))(
     config.rcon.host,
