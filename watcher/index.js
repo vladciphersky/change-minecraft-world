@@ -7,17 +7,37 @@ const rcon = new (require("modern-rcon"))(
 );
 
 console.log("* Preparing to start...");
-socket.emit("add-user", config.connection);
-socket.on("donation", (message) => {
-    message = JSON.parse(message);
-    const action = config.actions.find(action => action.amount == message.amount_main);
-    if(!action) return;
 
-    if(action.command.includes("{{username}}")) action.command = action.command.replace("{{username}}", message.username);
-    if(action.command.includes("{{message}}")) action.command = action.command.replace("{{message}}", message.message);
+socket.emit("add-user", config.connection);
+socket.on("donation", (event) => {
+    const { username, message, amount_main } = JSON.parse(event);
+
+    const actions = config.actions.filter(({ amount }) => amount === amount_main);
+
+    if (!actions.length) {
+        return;
+    }
 
     rcon.connect()
-        .then(() => rcon.send(action.command))
-        .then(() => console.log(`* Initialized action "${action.action}" by "${message.username}"`))
-        .then(() => rcon.disconnect());
+        .then(async () => {
+            for (const action of actions) {
+                console.log(`* Initialization action "${action.name}" by "${username}"`);
+
+                for (let command of action.commands) {
+                    command = command.replace("{{username}}", username)
+                        .replace("{{message}}", message)
+                        .replace("{{amount}}", amount_main);
+
+                    await rcon.send(command)
+                        .catch((error) =>
+                            console.log(`[!] An error occurred while sending a command to the server: ${error}`)
+                        );
+                }
+            }
+
+            await rcon.disconnect();
+        })
+        .catch((error) =>
+            console.log(`[!] An error occurred while connecting to the server: ${error}`)
+        );
 });
